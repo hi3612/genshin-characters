@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原神角色录</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- 页面头部 -->
+  <header class="site-header">
+    <h1 class="site-title">原神角色录</h1>
+    <p class="site-subtitle">点击角色卡片，了解他们的故事、性格与擅长之事</p>
+  </header>
+
+  <!-- 筛选栏 -->
+  <section class="filter-bar">
+    <div class="filter-group">
+      <span class="filter-label">元素</span>
+      <div class="filter-tags" id="element-filters">
+        <button class="tag active" data-type="element" data-value="all">全部</button>
+        <button class="tag" data-type="element" data-value="火">火</button>
+        <button class="tag" data-type="element" data-value="水">水</button>
+        <button class="tag" data-type="element" data-value="风">风</button>
+        <button class="tag" data-type="element" data-value="雷">雷</button>
+        <button class="tag" data-type="element" data-value="冰">冰</button>
+        <button class="tag" data-type="element" data-value="草">草</button>
+        <button class="tag" data-type="element" data-value="岩">岩</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">地区</span>
+      <div class="filter-tags" id="region-filters">
+        <button class="tag active" data-type="region" data-value="all">全部</button>
+        <button class="tag" data-type="region" data-value="蒙德">蒙德</button>
+        <button class="tag" data-type="region" data-value="璃月">璃月</button>
+        <button class="tag" data-type="region" data-value="稻妻">稻妻</button>
+        <button class="tag" data-type="region" data-value="须弥">须弥</button>
+        <button class="tag" data-type="region" data-value="枫丹">枫丹</button>
+        <button class="tag" data-type="region" data-value="至冬">至冬</button>
+        <button class="tag" data-type="region" data-value="旅行者">旅行者</button>
+      </div>
+    </div>
+    <div class="search-group">
+      <span class="filter-label">搜索</span>
+      <input type="text" id="search-input" class="search-input" placeholder="输入角色名称…">
+    </div>
+    <span class="result-count" id="result-count"></span>
+  </section>
+
+  <!-- 角色卡片网格 -->
+  <main class="character-grid" id="character-grid"></main>
+
+  <!-- 角色详情模态弹窗 -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modal-close" aria-label="关闭">&times;</button>
+      <div class="modal-content" id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <p>本网站为粉丝向作品，角色数据来源基于《原神》游戏。</p>
+    <p>&copy; 2026 原神角色录 · Genshin Impact Character Archive</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
