@@ -52,7 +52,8 @@
     albedo: "Albedo",
     itto: "Itto",
     xilonen: "Xilonen",
-    aether: "PlayerBoy"
+    aether: "PlayerBoy",
+    lumine: "PlayerGirl"
   };
 
   function getIconUrl(charId) {
