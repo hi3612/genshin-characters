@@ -26,9 +26,45 @@
     "无": "none"
   };
 
+  // Enka Network 角色图标名映射
+  var enkaIconMap = {
+    diluc: "Diluc",
+    hutao: "Hutao",
+    bennett: "Bennett",
+    mavuika: "Mavuika",
+    tartaglia: "Tartaglia",
+    furina: "Furina",
+    xingqiu: "Xingqiu",
+    venti: "Venti",
+    xiao: "Xiao",
+    kazuha: "Kazuha",
+    raiden: "Shougun",
+    yae: "Yae",
+    keqing: "Keqing",
+    ganyu: "Ganyu",
+    ayaka: "Ayaka",
+    qiqi: "Qiqi",
+    chasca: "Chasca",
+    nahida: "Nahida",
+    alhaitham: "Alhatham",
+    tighnari: "Tighnari",
+    zhongli: "Zhongli",
+    albedo: "Albedo",
+    itto: "Itto",
+    xilonen: "Xilonen",
+    aether: "PlayerBoy"
+  };
+
+  function getIconUrl(charId) {
+    var name = enkaIconMap[charId];
+    if (!name) return "";
+    return "https://enka.network/ui/UI_AvatarIcon_" + name + ".png";
+  }
+
   // ---- 角色卡片 ----
   function createCard(char, index) {
     var elemClass = elementClassMap[char.element] || "none";
+    var iconUrl = getIconUrl(char.id);
     var stars = "";
     for (var s = 0; s < char.rarity; s++) {
       stars += "★";
@@ -39,11 +75,14 @@
     div.setAttribute("data-id", char.id);
     div.style.setProperty("--i", index);
 
-    div.innerHTML =
+    var portraitHtml =
       '<div class="card-portrait ' + elemClass + '">' +
         '<div class="card-portrait-glow"></div>' +
-        '<div class="card-portrait-icon">' + char.name[0] + '</div>' +
-      '</div>' +
+        '<img class="card-portrait-img" src="' + iconUrl + '" alt="' + char.name + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+        '<div class="card-portrait-icon" style="display:none">' + char.name[0] + '</div>' +
+      '</div>';
+
+    div.innerHTML = portraitHtml +
       '<div class="card-info">' +
         '<div class="card-name">' + char.name + '</div>' +
         '<div class="card-title">' + char.title + '</div>' +
@@ -65,6 +104,7 @@
   // ---- 弹窗 ----
   function openModal(char) {
     var elemClass = elementClassMap[char.element] || "none";
+    var iconUrl = getIconUrl(char.id);
     var stars = "";
     for (var s = 0; s < char.rarity; s++) {
       stars += "★";
@@ -76,7 +116,8 @@
 
     modalContent.innerHTML =
       '<div class="modal-portrait ' + elemClass + '">' +
-        '<div class="modal-portrait-icon">' + char.name[0] + '</div>' +
+        '<img class="modal-portrait-img" src="' + iconUrl + '" alt="' + char.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+        '<div class="modal-portrait-icon" style="display:none">' + char.name[0] + '</div>' +
       '</div>' +
       '<div class="modal-body">' +
         '<div class="detail-name">' + char.name + '</div>' +
