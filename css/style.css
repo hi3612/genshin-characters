@@ -777,6 +777,101 @@ body::after {
   border-color: rgba(201,169,110,0.4);
 }
 
+/* ---- 技能卡片 ---- */
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skill-card {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 16px 18px;
+  transition: border-color 0.2s;
+}
+
+.skill-card:hover {
+  border-color: rgba(201,169,110,0.25);
+}
+
+.skill-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gold-bright);
+  margin-bottom: 2px;
+}
+
+.skill-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.04);
+  padding: 1px 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.skill-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ---- 命之座 ---- */
+.constellation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.constellation-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: border-color 0.2s;
+}
+
+.constellation-item:hover {
+  border-color: rgba(201,169,110,0.2);
+}
+
+.constellation-index {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.constellation-body {
+  min-width: 0;
+}
+
+.constellation-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+
+.constellation-effect {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
 /* ===== 页脚 ===== */
 .site-footer {
   text-align: center;

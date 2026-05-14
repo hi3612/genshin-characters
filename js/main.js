@@ -115,6 +115,44 @@
       return "<li>" + s + "</li>";
     }).join("");
 
+    // 技能天赋 HTML
+    var skillsHtml = "";
+    if (char.skills) {
+      var typeLabels = ["普通攻击", "元素战技", "元素爆发"];
+      skillsHtml = '<div class="detail-section"><h3>技能天赋</h3><div class="skill-list">';
+      for (var si = 0; si < char.skills.length; si++) {
+        var sk = char.skills[si];
+        skillsHtml +=
+          '<div class="skill-card">' +
+            '<div class="skill-name">' + sk.name + '</div>' +
+            '<div class="skill-tag">' + typeLabels[si] + '</div>' +
+            '<p class="skill-desc">' + sk.desc + '</p>' +
+          '</div>';
+      }
+      skillsHtml += '</div></div>';
+    }
+
+    // 命之座 HTML
+    var consHtml = "";
+    if (char.constellation) {
+      consHtml =
+        '<div class="detail-section">' +
+          '<h3>命之座 · ' + char.constellation.name + '</h3>' +
+          '<div class="constellation-list">';
+      for (var ci = 0; ci < char.constellation.levels.length; ci++) {
+        var cl = char.constellation.levels[ci];
+        consHtml +=
+          '<div class="constellation-item">' +
+            '<div class="constellation-index">' + (ci + 1) + '</div>' +
+            '<div class="constellation-body">' +
+              '<div class="constellation-name">' + cl.name + '</div>' +
+              '<div class="constellation-effect">' + cl.effect + '</div>' +
+            '</div>' +
+          '</div>';
+      }
+      consHtml += '</div></div>';
+    }
+
     modalContent.innerHTML =
       '<div class="modal-portrait ' + elemClass + '">' +
         '<img class="modal-portrait-img" src="' + iconUrl + '" alt="' + char.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
@@ -141,6 +179,8 @@
           '<h3>擅长之事</h3>' +
           '<ul>' + specialtiesHtml + '</ul>' +
         '</div>' +
+        skillsHtml +
+        consHtml +
       '</div>';
 
     modalOverlay.classList.add("show");
