@@ -1,0 +1,19 @@
+{
+  "name": "提瓦特旅人录",
+  "short_name": "旅人录",
+  "description": "穿越星海，邂逅提瓦特大陆上的每一位旅伴",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#060c2c",
+  "theme_color": "#060c2c",
+  "orientation": "any",
+  "icons": [{
+    "src": "icon-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }, {
+    "src": "icon-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }]
+}
