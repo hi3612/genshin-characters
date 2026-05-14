@@ -184,7 +184,11 @@
 
     var relationsHtml = "";
     if (char.relations && char.relations.length > 0) {
-      relationsHtml = '<div class="detail-section"><h3>羁绊</h3><div class="relation-list">';
+      relationsHtml =
+        '<div class="relation-canvas-wrap">' +
+          '<div class="detail-section"><h3>羁绊</h3></div>' +
+          '<canvas class="relation-graph" data-id="' + char.id + '" height="380"></canvas>' +
+          '<div class="relation-list" style="padding:0 16px 16px">';
       for (var ri = 0; ri < char.relations.length; ri++) {
         var r = char.relations[ri];
         relationsHtml += '<div class="relation-card"><div class="relation-names"><strong>' + r.name + '</strong> · ' + r.relation + '</div><p class="relation-note">' + r.note + '</p></div>';
@@ -220,6 +224,178 @@
     modalOverlay.classList.add("show");
     document.body.style.overflow = "hidden";
     modalOverlay.querySelector(".modal").scrollTop = 0;
+
+    // 绘制关系图
+    setTimeout(function () { drawRelationGraph(char); }, 150);
+  }
+
+  // ---- 个人关系图 ----
+  var relIconCache = {};
+
+  function loadRelIcon(id, callback) {
+    if (relIconCache[id]) { callback(relIconCache[id]); return; }
+    var url = getIconUrl(id);
+    if (!url) { callback(null); return; }
+    var img = new Image();
+    img.onload = function () { relIconCache[id] = img; callback(img); };
+    img.onerror = function () { relIconCache[id] = null; callback(null); };
+    img.src = url;
+  }
+
+  function drawRelationGraph(char) {
+    var canvas = document.querySelector('.relation-graph[data-id="' + char.id + '"]');
+    if (!canvas) return;
+
+    var relations = char.relations || [];
+    if (relations.length === 0) return;
+
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.parentElement.clientWidth - 32;
+    var h = 380;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+
+    // 布局 — 确保不超出画布
+    var cx = w / 2;
+    var cy = h / 2;
+    var centerR = 36;
+    var outerR = 28;
+    var nameH = 13;
+    var orbitR = Math.min(w, h) / 2 - outerR - nameH - 16;
+    var angleStep = (Math.PI * 2) / relations.length;
+    var startAngle = -Math.PI / 2;
+
+    // 查找关联角色
+    var relatedChars = [];
+    for (var i = 0; i < relations.length; i++) {
+      for (var j = 0; j < characters.length; j++) {
+        if (characters[j].name === relations[i].name) {
+          relatedChars.push({ char: characters[j], relation: relations[i].relation });
+          break;
+        }
+      }
+    }
+
+    // 确保中心角色图标已加载
+    loadRelIcon(char.id, function (centerImg) {
+
+      // 加载所有关联角色图标
+      var loaded = 0;
+      var total = relatedChars.length;
+
+      function tryDraw() {
+        loaded++;
+        if (loaded >= total) doDraw();
+      }
+      if (total === 0) doDraw();
+
+      for (var k = 0; k < relatedChars.length; k++) {
+        relatedChars[k].pos = {
+          x: cx + Math.cos(startAngle + k * angleStep) * orbitR,
+          y: cy + Math.sin(startAngle + k * angleStep) * orbitR
+        };
+        loadRelIcon(relatedChars[k].char.id, tryDraw);
+      }
+
+      function doDraw() {
+        ctx.clearRect(0, 0, w, h);
+
+        // 连线
+        for (var li = 0; li < relatedChars.length; li++) {
+          var rc = relatedChars[li];
+          var mx = (cx + rc.pos.x) / 2;
+          var my = (cy + rc.pos.y) / 2;
+
+          // 连线 — 从中心边缘到关联节点边缘
+          var dx2 = rc.pos.x - cx;
+          var dy2 = rc.pos.y - cy;
+          var len2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+          var ux = dx2 / len2;
+          var uy = dy2 / len2;
+          var sx = cx + ux * centerR;
+          var sy = cy + uy * centerR;
+          var ex = rc.pos.x - ux * outerR;
+          var ey = rc.pos.y - uy * outerR;
+
+          ctx.beginPath();
+          ctx.moveTo(sx, sy);
+          ctx.lineTo(ex, ey);
+          ctx.strokeStyle = "rgba(201,169,110,0.5)";
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          // 标签 — 统一盖在连线中点上方
+          ctx.font = "bold 11px 'PingFang SC','Microsoft YaHei',sans-serif";
+          var tw = ctx.measureText(rc.relation).width;
+          var lx = mx;
+          var ly = my + 1;
+
+          ctx.fillStyle = "rgba(8,12,40,0.9)";
+          ctx.fillRect(lx - tw / 2 - 6, ly - 8, tw + 12, 16);
+          ctx.strokeStyle = "rgba(201,169,110,0.3)";
+          ctx.lineWidth = 0.5;
+          ctx.strokeRect(lx - tw / 2 - 6, ly - 8, tw + 12, 16);
+
+          ctx.fillStyle = "rgba(201,169,110,0.85)";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(rc.relation, lx, ly);
+        }
+
+        // 关联节点
+        for (var ni = 0; ni < relatedChars.length; ni++) {
+          var rch = relatedChars[ni];
+          var nx = rch.pos.x;
+          var ny = rch.pos.y;
+
+          var rimg = relIconCache[rch.char.id];
+          if (rimg) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(nx, ny, outerR, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(rimg, nx - outerR, ny - outerR, outerR * 2, outerR * 2);
+            ctx.restore();
+          } else {
+            ctx.beginPath();
+            ctx.arc(nx, ny, outerR, 0, Math.PI * 2);
+            ctx.fillStyle = "#555";
+            ctx.fill();
+          }
+          ctx.fillStyle = "rgba(255,255,255,0.7)";
+          ctx.font = "bold 10px 'PingFang SC','Microsoft YaHei',sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(rch.char.name, nx, ny + outerR + 11);
+        }
+
+        // 中心节点（最后画，在最上层）
+        if (centerImg) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(cx, cy, centerR, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.drawImage(centerImg, cx - centerR, cy - centerR, centerR * 2, centerR * 2);
+          ctx.restore();
+        }
+        // 中心光环
+        ctx.beginPath();
+        ctx.arc(cx, cy, centerR + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(201,169,110,0.5)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 10px 'PingFang SC','Microsoft YaHei',sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(char.name, cx, cy + centerR + 12);
+      }
+    });
   }
 
   function closeModal() {
@@ -347,6 +523,57 @@
     render();
   });
 
+  // ---- 今日寿星 ----
+  function checkBirthday() {
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    var today = month + "月" + day + "日";
+
+    var birthdayChars = [];
+    for (var i = 0; i < characters.length; i++) {
+      if (characters[i].birthday === today) {
+        birthdayChars.push(characters[i]);
+      }
+    }
+
+    var banner = document.getElementById("birthday-banner");
+    if (birthdayChars.length === 0) {
+      banner.style.display = "none";
+      return;
+    }
+
+    var iconsHtml = "";
+    for (var j = 0; j < birthdayChars.length; j++) {
+      var bc = birthdayChars[j];
+      var iconUrl = getIconUrl(bc.id);
+      iconsHtml +=
+        '<div class="birthday-char" data-id="' + bc.id + '">' +
+          '<img class="birthday-char-icon" src="' + iconUrl + '" alt="' + bc.name + '" onerror="this.style.display=\'none\'">' +
+          '<div>' +
+            '<div class="birthday-char-name">' + bc.name + '</div>' +
+            '<div class="birthday-char-meta">' + bc.element + ' · ' + bc.region + '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    banner.innerHTML =
+      '<div class="birthday-banner-title"><span class="cake">🎂</span> 今日寿星</div>' +
+      '<div class="birthday-chars">' + iconsHtml + '</div>';
+    banner.style.display = "block";
+
+    // 点击寿星卡片打开弹窗
+    banner.querySelectorAll(".birthday-char").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var cid = el.getAttribute("data-id");
+        for (var k = 0; k < characters.length; k++) {
+          if (characters[k].id === cid) { openModal(characters[k]); break; }
+        }
+      });
+    });
+  }
+
   render();
+  checkBirthday();
 
 })();
