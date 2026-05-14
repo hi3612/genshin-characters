@@ -42,10 +42,40 @@
         <button class="tag" data-type="region" data-value="星海">星海</button>
       </div>
     </div>
+    <div class="filter-group">
+      <span class="filter-label">稀有度</span>
+      <div class="filter-tags" id="rarity-filters">
+        <button class="tag active" data-type="rarity" data-value="all">全部</button>
+        <button class="tag" data-type="rarity" data-value="5">★★★★★</button>
+        <button class="tag" data-type="rarity" data-value="4">★★★★</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">武器</span>
+      <div class="filter-tags" id="weapon-filters">
+        <button class="tag active" data-type="weapon" data-value="all">全部</button>
+        <button class="tag" data-type="weapon" data-value="单手剑">单手剑</button>
+        <button class="tag" data-type="weapon" data-value="双手剑">双手剑</button>
+        <button class="tag" data-type="weapon" data-value="长柄武器">长柄武器</button>
+        <button class="tag" data-type="weapon" data-value="弓">弓</button>
+        <button class="tag" data-type="weapon" data-value="法器">法器</button>
+      </div>
+    </div>
     <div class="search-group">
       <span class="filter-label">搜索</span>
       <input type="text" id="search-input" class="search-input" placeholder="输入角色名称…">
     </div>
+    <div class="filter-group">
+      <span class="filter-label">排序</span>
+      <select id="sort-select" class="sort-select">
+        <option value="default">默认</option>
+        <option value="rarity-desc">星级高→低</option>
+        <option value="birthday">生日近→远</option>
+      </select>
+    </div>
+    <label class="fav-toggle">
+      <input type="checkbox" id="fav-only"> 仅看收藏
+    </label>
     <span class="result-count" id="result-count"></span>
   </section>
 

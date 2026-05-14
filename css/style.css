@@ -188,6 +188,99 @@ body {
   margin-left: auto;
 }
 
+/* ---- 排序下拉 ---- */
+.sort-select {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-primary);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.sort-select:hover,
+.sort-select:focus {
+  border-color: var(--gold-dark);
+}
+
+.sort-select option {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+}
+
+/* ---- 仅看收藏 ---- */
+.fav-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fav-toggle input {
+  accent-color: var(--gold);
+}
+
+/* ---- 卡片收藏+置顶按钮 ---- */
+.card-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  display: flex;
+  gap: 4px;
+  opacity: 1;
+}
+
+.card-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.5);
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+  line-height: 1;
+}
+
+.card-action-btn:hover {
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  transform: scale(1.15);
+}
+
+.card-action-btn.fav-active {
+  color: #ff6b8a;
+  background: rgba(255,107,138,0.25);
+}
+
+.card-action-btn.pin-active {
+  color: var(--gold-bright);
+  background: rgba(201,169,110,0.25);
+}
+
+/* 置顶卡片微标识 */
+.card.pinned::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+  z-index: 11;
+}
+
 /* ===== 角色卡片网格 ===== */
 .character-grid {
   max-width: 1300px;
