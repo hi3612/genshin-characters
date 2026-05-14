@@ -114,8 +114,11 @@
     <button id="pwa-dismiss-btn" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:1.2rem;cursor:pointer;">✕</button>
   </div>
   <script>
+    // 临时禁用 SW 避免缓存问题
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
+      navigator.serviceWorker.getRegistrations().then(function (regs) {
+        for (var i = 0; i < regs.length; i++) regs[i].unregister();
+      });
     }
     var deferredPrompt;
     window.addEventListener("beforeinstallprompt", function (e) {
