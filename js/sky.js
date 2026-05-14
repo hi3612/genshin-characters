@@ -19,9 +19,12 @@
 
       var x, y;
       if (inRiver) {
-        // 河带主轴：从左上 (5%, 28%) 到 右下 (95%, 58%)，带宽约 16%
+        // 河带主轴：窄屏偏上，宽屏居中
+        var isNarrow = window.innerWidth < 600;
+        var bandTop = isNarrow ? 0.08 : 0.28;
+        var bandBot = isNarrow ? 0.35 : 0.58;
         var cx = 0.05 + t * 0.90;
-        var cy = 0.28 + t * 0.30;
+        var cy = bandTop + t * (bandBot - bandTop);
         // 轻微波浪
         cy += Math.sin(t * Math.PI * 3.2) * 0.025;
         var offset = (Math.random() - 0.5) * 0.16;

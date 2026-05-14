@@ -186,6 +186,8 @@ body {
   color: var(--text-muted);
   font-size: 0.78rem;
   margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ---- 排序下拉 ---- */
@@ -643,6 +645,10 @@ body {
   color: var(--text-muted);
   margin-top: 4px;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-meta {
@@ -651,6 +657,10 @@ body {
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 10px;
+}
+
+.card-meta-weapon {
+  margin-top: 4px;
 }
 
 .card-meta span {
@@ -1142,14 +1152,46 @@ body {
   .character-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .site-title { font-size: 2rem; letter-spacing: 6px; }
   .site-subtitle { font-size: 0.9rem; letter-spacing: 2px; }
-  .filter-bar { padding: 14px 16px; gap: 12px; border-radius: 28px; }
+  .filter-bar { padding: 12px 14px; gap: 10px; border-radius: 28px; }
   .card-portrait { height: 150px; }
   .modal-portrait { height: 190px; }
   .modal-body { padding: 22px 20px 24px; }
+  .tag { padding: 4px 10px; font-size: 0.73rem; }
+  .search-input { width: 140px; }
 }
 
-@media (max-width: 480px) {
-  .character-grid { grid-template-columns: 1fr; gap: 18px; }
-  .site-title { font-size: 1.7rem; letter-spacing: 5px; }
-  .card-portrait { height: 200px; }
+@media (max-width: 500px) {
+  .character-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .site-title { font-size: 1.5rem; letter-spacing: 4px; }
+  .site-subtitle { font-size: 0.78rem; }
+  .card-portrait { height: 110px; }
+  .card-info { padding: 10px 8px 12px; }
+  .card-name { font-size: 0.8rem; letter-spacing: 1px; }
+  .card-title { font-size: 0.62rem; }
+  .card-meta { margin-top: 6px; gap: 4px; }
+  .card-meta-weapon { margin-top: 2px; }
+  .card-meta span { font-size: 0.6rem; padding: 2px 6px; }
+  .card-stars { font-size: 0.6rem; }
+  .card-action-btn { width: 20px; height: 20px; font-size: 0.65rem; }
+  .card-actions { top: 3px; right: 3px; gap: 2px; }
+  .card-actions { top: 3px; right: 3px; gap: 2px; }
+  .card-portrait-icon { width: 40px; height: 40px; font-size: 1.2rem; }
+  .filter-bar { padding: 10px 12px; gap: 8px; border-radius: 22px; }
+  .filter-group { gap: 3px; }
+  .filter-tags { gap: 2px; }
+  .tag { padding: 2px 6px; font-size: 0.66rem; border-radius: 14px; }
+  .filter-label { font-size: 0.66rem; min-width: auto; letter-spacing: 0.5px; }
+  .search-input { width: 110px; font-size: 0.72rem; padding: 4px 10px; }
+  .sort-select { font-size: 0.7rem; padding: 3px 8px; }
+  .result-count { font-size: 0.68rem; }
+  .modal-portrait { height: 150px; }
+  .modal-body { padding: 14px 12px 18px; }
+  .modal { width: 97%; border-radius: 16px; }
+  .modal-body .detail-name { font-size: 1.4rem; }
+}
+
+@media (max-width: 380px) {
+  .character-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .card-portrait { height: 130px; }
+  .tag { font-size: 0.64rem; padding: 2px 6px; }
 }

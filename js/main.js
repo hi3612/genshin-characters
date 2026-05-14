@@ -128,6 +128,8 @@
         '<div class="card-meta">' +
           '<span>' + char.element + '</span>' +
           '<span>' + char.region + '</span>' +
+        '</div>' +
+        '<div class="card-meta card-meta-weapon">' +
           '<span>' + char.weapon + '</span>' +
         '</div>' +
         '<div class="card-stars">' + stars + '</div>' +
@@ -187,7 +189,7 @@
       relationsHtml =
         '<div class="relation-canvas-wrap">' +
           '<div class="detail-section"><h3>羁绊</h3></div>' +
-          '<canvas class="relation-graph" data-id="' + char.id + '" height="380"></canvas>' +
+          '<canvas class="relation-graph" data-id="' + char.id + '" height="340"></canvas>' +
           '<div class="relation-list" style="padding:0 16px 16px">';
       for (var ri = 0; ri < char.relations.length; ri++) {
         var r = char.relations[ri];
@@ -267,7 +269,9 @@
 
     var dpr = window.devicePixelRatio || 1;
     var w = canvas.parentElement.clientWidth - 32;
-    var h = 380;
+    // 响应式高度和尺寸
+    var maxH = parseInt(canvas.getAttribute("height")) || 340;
+    var h = maxH;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + "px";
@@ -277,13 +281,14 @@
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
 
-    // 布局 — 确保不超出画布
+    // 响应式尺寸
+    var isSmall = w < 400;
     var cx = w / 2;
     var cy = h / 2;
-    var centerR = 36;
-    var outerR = 28;
+    var centerR = 32;
+    var outerR = 24;
     var nameH = 13;
-    var orbitR = Math.min(w, h) / 2 - outerR - nameH - 16;
+    var orbitR = Math.min(w, h) / 2 - outerR - nameH - 8;
     var angleStep = (Math.PI * 2) / relations.length;
     var startAngle = -Math.PI / 2;
 
@@ -347,7 +352,7 @@
           ctx.stroke();
 
           // 标签 — 统一盖在连线中点上方
-          ctx.font = "bold 11px 'PingFang SC','Microsoft YaHei',sans-serif";
+          ctx.font = (isSmall ? "bold 9px" : "bold 11px") + " 'PingFang SC','Microsoft YaHei',sans-serif";
           var tw = ctx.measureText(rc.relation).width;
           var lx = mx;
           var ly = my + 1;
@@ -385,9 +390,9 @@
             ctx.fill();
           }
           ctx.fillStyle = "rgba(255,255,255,0.7)";
-          ctx.font = "bold 10px 'PingFang SC','Microsoft YaHei',sans-serif";
+          ctx.font = (isSmall ? "8px" : "bold 10px") + " 'PingFang SC','Microsoft YaHei',sans-serif";
           ctx.textAlign = "center";
-          ctx.fillText(rch.char.name, nx, ny + outerR + 11);
+          ctx.fillText(rch.char.name, nx, ny + outerR + (isSmall ? 9 : 11));
         }
 
         // 中心节点（最后画，在最上层）
@@ -407,9 +412,9 @@
         ctx.stroke();
 
         ctx.fillStyle = "#fff";
-        ctx.font = "bold 10px 'PingFang SC','Microsoft YaHei',sans-serif";
+        ctx.font = (isSmall ? "8px" : "bold 10px") + " 'PingFang SC','Microsoft YaHei',sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(char.name, cx, cy + centerR + 12);
+        ctx.fillText(char.name, cx, cy + centerR + (isSmall ? 9 : 12));
       }
     });
   }
@@ -482,7 +487,7 @@
       }
     }
 
-    resultCount.textContent = "共 " + sorted.length + " 位角色";
+    resultCount.textContent = "✦ 共 " + sorted.length + " 位旅人";
   }
 
   function setActiveTag(tagList, value) {
