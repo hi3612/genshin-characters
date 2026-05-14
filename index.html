@@ -109,26 +109,31 @@
   <script src="js/data.js"></script>
   <script src="js/sky.js"></script>
   <script src="js/main.js"></script>
+  <div id="pwa-install-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(6,12,44,0.95);border-top:1px solid rgba(201,169,110,0.3);padding:12px 20px;display:flex;gap:12px;justify-content:center;align-items:center;">
+    <button id="pwa-install-btn" style="background:linear-gradient(135deg,#957545,#d4b474);border:none;color:#fff;padding:12px 28px;border-radius:24px;font-size:1rem;font-family:inherit;cursor:pointer;letter-spacing:2px;">📱 安装到桌面</button>
+    <button id="pwa-dismiss-btn" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:1.2rem;cursor:pointer;">✕</button>
+  </div>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("sw.js");
     }
     var deferredPrompt;
     window.addEventListener("beforeinstallprompt", function (e) {
-      e.preventDefault();
       deferredPrompt = e;
-      var btn = document.createElement("div");
-      btn.id = "pwa-install-bar";
-      btn.innerHTML = '<button id="pwa-install-btn">📱 安装到桌面</button><button id="pwa-dismiss-btn">✕</button>';
-      btn.style.cssText = "position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(6,12,44,0.95);border-top:1px solid rgba(201,169,110,0.3);padding:12px 20px;display:flex;gap:12px;justify-content:center;align-items:center;";
-      document.body.appendChild(btn);
-      document.getElementById("pwa-install-btn").style.cssText = "background:linear-gradient(135deg,#957545,#d4b474);border:none;color:#fff;padding:12px 28px;border-radius:24px;font-size:1rem;font-family:inherit;cursor:pointer;letter-spacing:2px;";
-      document.getElementById("pwa-dismiss-btn").style.cssText = "background:none;border:none;color:rgba(255,255,255,0.4);font-size:1.2rem;cursor:pointer;";
-      document.getElementById("pwa-install-btn").addEventListener("click", function () {
+    });
+    document.getElementById("pwa-install-btn").addEventListener("click", function () {
+      if (deferredPrompt) {
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function () { btn.remove(); deferredPrompt = null; });
-      });
-      document.getElementById("pwa-dismiss-btn").addEventListener("click", function () { btn.remove(); });
+        deferredPrompt.userChoice.then(function () {
+          document.getElementById("pwa-install-bar").remove();
+          deferredPrompt = null;
+        });
+      } else {
+        alert("请使用浏览器菜单中的「添加到主屏幕」功能");
+      }
+    });
+    document.getElementById("pwa-dismiss-btn").addEventListener("click", function () {
+      document.getElementById("pwa-install-bar").remove();
     });
   </script>
 </body>
