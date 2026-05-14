@@ -161,11 +161,19 @@
       arcHeight = (Math.random() - 0.5) * 0.015;
     }
 
-    // 颜色主题 — 金色或淡蓝
-    var isGold = Math.random() < 0.5;
-    var headR = isGold ? 255 : 200;
-    var headG = isGold ? 220 : 210;
-    var headB = isGold ? 140 : 255;
+    // 颜色主题 — 六种颜色随机
+    var colorThemes = [
+      { r: 255, g: 220, b: 140 },  // 暖金
+      { r: 200, g: 210, b: 255 },  // 淡蓝
+      { r: 255, g: 255, b: 255 },  // 纯白
+      { r: 210, g: 160, b: 230 },  // 淡紫
+      { r: 140, g: 220, b: 210 },  // 青绿
+      { r: 255, g: 175, b: 175 },  // 淡粉
+    ];
+    var theme = colorThemes[Math.floor(Math.random() * colorThemes.length)];
+    var headR = theme.r;
+    var headG = theme.g;
+    var headB = theme.b;
 
     // 碎裂粒子
     var sparks = [];
