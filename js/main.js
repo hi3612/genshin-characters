@@ -153,6 +153,24 @@
       consHtml += '</div></div>';
     }
 
+    // 羁绊 HTML
+    var relationsHtml = "";
+    if (char.relations && char.relations.length > 0) {
+      relationsHtml = '<div class="detail-section"><h3>羁绊</h3><div class="relation-list">';
+      for (var ri = 0; ri < char.relations.length; ri++) {
+        var r = char.relations[ri];
+        relationsHtml +=
+          '<div class="relation-card">' +
+            '<div class="relation-names"><strong>' + r.name + '</strong> · ' + r.relation + '</div>' +
+            '<p class="relation-note">' + r.note + '</p>' +
+          '</div>';
+      }
+      relationsHtml += '</div></div>';
+    }
+
+    // 生日标签
+    var birthdayTag = char.birthday ? '<span class="meta-birthday">' + char.birthday + '</span>' : '';
+
     modalContent.innerHTML =
       '<div class="modal-portrait ' + elemClass + '">' +
         '<img class="modal-portrait-img" src="' + iconUrl + '" alt="' + char.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
@@ -166,6 +184,7 @@
           '<span>' + char.element + '</span>' +
           '<span>' + char.region + '</span>' +
           '<span>' + char.weapon + '</span>' +
+          birthdayTag +
         '</div>' +
         '<div class="detail-section">' +
           '<h3>角色故事</h3>' +
@@ -179,6 +198,7 @@
           '<h3>擅长之事</h3>' +
           '<ul>' + specialtiesHtml + '</ul>' +
         '</div>' +
+        relationsHtml +
         skillsHtml +
         consHtml +
       '</div>';
