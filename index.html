@@ -101,6 +101,12 @@
 
   <!-- 页脚 -->
   <footer class="site-footer">
+    <div style="background:linear-gradient(135deg,rgba(149,117,69,0.3),rgba(212,180,116,0.2));border:1px solid rgba(201,169,110,0.3);border-radius:16px;padding:16px 20px;margin-bottom:16px;text-align:center;">
+      <p style="color:#f0deaa;font-size:1rem;margin:0 0 8px;">📱 想安装到手机？</p>
+      <p style="color:#a49f90;font-size:0.8rem;margin:0 0 4px;">Chrome/Edge：右上角菜单 → <b>安装应用</b></p>
+      <p style="color:#a49f90;font-size:0.8rem;margin:0;">Safari：底部分享按钮 → <b>添加到主屏幕</b></p>
+    </div>
+    <button class="install-btn" id="install-btn" style="display:none" onclick="installPWA()">📱 一键安装到桌面</button>
     <p>本网站为粉丝向作品，角色数据来源基于《原神》游戏。</p>
     <p>&copy; 2026 提瓦特旅人录 · 星海纪行</p>
   </footer>
@@ -109,12 +115,7 @@
   <script src="js/data.js"></script>
   <script src="js/sky.js"></script>
   <script src="js/main.js"></script>
-  <div id="pwa-install-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(6,12,44,0.95);border-top:1px solid rgba(201,169,110,0.3);padding:12px 20px;display:flex;gap:12px;justify-content:center;align-items:center;">
-    <button id="pwa-install-btn" style="background:linear-gradient(135deg,#957545,#d4b474);border:none;color:#fff;padding:12px 28px;border-radius:24px;font-size:1rem;font-family:inherit;cursor:pointer;letter-spacing:2px;">📱 安装到桌面</button>
-    <button id="pwa-dismiss-btn" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:1.2rem;cursor:pointer;">✕</button>
-  </div>
   <script>
-    // 临时禁用 SW 避免缓存问题
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.getRegistrations().then(function (regs) {
         for (var i = 0; i < regs.length; i++) regs[i].unregister();
@@ -123,21 +124,16 @@
     var deferredPrompt;
     window.addEventListener("beforeinstallprompt", function (e) {
       deferredPrompt = e;
+      var btn = document.getElementById("install-btn");
+      if (btn) btn.style.display = "inline-block";
     });
-    document.getElementById("pwa-install-btn").addEventListener("click", function () {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function () {
-          document.getElementById("pwa-install-bar").remove();
-          deferredPrompt = null;
-        });
-      } else {
-        alert("请使用浏览器菜单中的「添加到主屏幕」功能");
-      }
-    });
-    document.getElementById("pwa-dismiss-btn").addEventListener("click", function () {
-      document.getElementById("pwa-install-bar").remove();
-    });
+    function installPWA() {
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+    }
+    setTimeout(function () {
+      var btn = document.getElementById("install-btn");
+      if (btn) btn.style.display = "inline-block";
+    }, 3000);
   </script>
 </body>
 </html>
