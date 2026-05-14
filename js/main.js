@@ -256,6 +256,7 @@
     modalOverlay.classList.add("show");
     document.body.style.overflow = "hidden";
     modalOverlay.querySelector(".modal").scrollTop = 0;
+    history.pushState({ modal: char.id }, "");
 
     // 绘制关系图
     setTimeout(function () { drawRelationGraph(char); }, 150);
@@ -434,13 +435,22 @@
   }
 
   function closeModal() {
+    if (!modalOverlay.classList.contains("show")) return;
     modalOverlay.classList.remove("show");
     document.body.style.overflow = "";
+    history.back();
   }
 
   modalClose.addEventListener("click", closeModal);
   modalOverlay.addEventListener("click", function (e) { if (e.target === modalOverlay) closeModal(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && modalOverlay.classList.contains("show")) closeModal(); });
+
+  window.addEventListener("popstate", function () {
+    if (modalOverlay.classList.contains("show")) {
+      modalOverlay.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+  });
 
   // ---- 筛选 ----
   function matches(char) {
