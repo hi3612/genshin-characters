@@ -1,4 +1,4 @@
-var CACHE_NAME = "genshin-char-v2";
+var CACHE_NAME = "genshin-char-v3";
 var toCache = [
   "./",
   "index.html",
