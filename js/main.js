@@ -196,6 +196,21 @@
       relationsHtml += '</div></div>';
     }
 
+    // 经典台词
+    var quotesHtml = "";
+    if (char.quotes && char.quotes.length > 0) {
+      quotesHtml = '<div class="detail-section"><h3>经典台词</h3><div class="quote-list">';
+      for (var qi = 0; qi < char.quotes.length; qi++) {
+        var q = char.quotes[qi];
+        quotesHtml +=
+          '<div class="quote-item">' +
+            '<div class="quote-text">"' + q.text + '"</div>' +
+            '<div class="quote-context">—— ' + q.context + '</div>' +
+          '</div>';
+      }
+      quotesHtml += '</div></div>';
+    }
+
     var birthdayTag = char.birthday ? '<span class="meta-birthday">' + char.birthday + '</span>' : '';
 
     modalContent.innerHTML =
@@ -213,6 +228,7 @@
           '<span>' + char.weapon + '</span>' +
           birthdayTag +
         '</div>' +
+        quotesHtml +
         '<div class="detail-section"><h3>角色故事</h3><p>' + char.story + '</p></div>' +
         '<div class="detail-section"><h3>性格特点</h3><p>' + char.personality + '</p></div>' +
         '<div class="detail-section"><h3>擅长之事</h3><ul>' + specialtiesHtml + '</ul></div>' +

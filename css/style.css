@@ -976,6 +976,34 @@ body {
   line-height: 1.65;
 }
 
+/* ---- 台词 ---- */
+.quote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quote-item {
+  padding: 14px 18px;
+  background: rgba(201,169,110,0.06);
+  border-radius: 12px;
+  border-left: 3px solid rgba(201,169,110,0.4);
+}
+
+.quote-text {
+  font-size: 0.9rem;
+  color: var(--gold-bright);
+  line-height: 1.7;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.quote-context {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
 /* ---- 技能卡片 ---- */
 .skill-list {
   display: flex;
