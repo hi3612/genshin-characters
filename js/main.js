@@ -36,15 +36,24 @@
     }
   }
 
+  function loadArray(key) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
   function saveSet(key, s) {
     localStorage.setItem(key, JSON.stringify(Array.from(s)));
   }
 
   var favSet = loadSet(STORAGE_KEY_FAV);
-  var pinSet = loadSet(STORAGE_KEY_PIN);
+  var pinList = loadArray(STORAGE_KEY_PIN); // 有序数组，最新置顶在最前
 
   function isFav(id) { return favSet.has(id); }
-  function isPinned(id) { return pinSet.has(id); }
+  function isPinned(id) { return pinList.indexOf(id) >= 0; }
 
   function toggleFav(id) {
     if (favSet.has(id)) favSet.delete(id); else favSet.add(id);
@@ -53,8 +62,13 @@
   }
 
   function togglePin(id) {
-    if (pinSet.has(id)) pinSet.delete(id); else pinSet.add(id);
-    saveSet(STORAGE_KEY_PIN, pinSet);
+    var idx = pinList.indexOf(id);
+    if (idx >= 0) {
+      pinList.splice(idx, 1);
+    } else {
+      pinList.push(id); // 最新置顶放在最后
+    }
+    localStorage.setItem(STORAGE_KEY_PIN, JSON.stringify(pinList));
     render();
   }
 
@@ -124,7 +138,7 @@
       '</div>' +
       '<div class="card-info">' +
         '<div class="card-name">' + char.name + '</div>' +
-        '<div class="card-title">' + char.title + '</div>' +
+        '<div class="card-title">' + (char.cardTitle || char.title) + '</div>' +
         '<div class="card-meta">' +
           '<span>' + char.element + '</span>' +
           '<span>' + char.region + '</span>' +
@@ -468,12 +482,16 @@
 
     sortChars(filtered);
 
-    // 置顶角色排最前
+    // 置顶角色按置顶顺序排最前
     var pinned = [], rest = [];
     for (var j = 0; j < filtered.length; j++) {
-      if (pinSet.has(filtered[j].id)) pinned.push(filtered[j]);
+      if (pinList.indexOf(filtered[j].id) >= 0) pinned.push(filtered[j]);
       else rest.push(filtered[j]);
     }
+    // 按 pinList 顺序排列置顶角色
+    pinned.sort(function (a, b) {
+      return pinList.indexOf(a.id) - pinList.indexOf(b.id);
+    });
     var sorted = pinned.concat(rest);
 
     if (sorted.length === 0) {

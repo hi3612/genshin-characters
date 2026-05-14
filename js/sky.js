@@ -145,11 +145,11 @@
 
     // 起点 — 左上象限
     var sx = Math.random() * w * 0.45;
-    var sy = Math.random() * h * 0.30;
+    var sy = Math.random() * h * 0.18;
 
     // 终点方向 — 右下
     var ex = sx + w * 0.3 + Math.random() * w * 0.5;
-    var ey = sy + h * 0.25 + Math.random() * h * 0.4;
+    var ey = sy + h * 0.15 + Math.random() * h * 0.25;
 
     var life = 0;
     var maxLife = 200 + Math.random() * 120;

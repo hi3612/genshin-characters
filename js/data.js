@@ -42,6 +42,7 @@ const characters = [
     id: "hutao",
     name: "胡桃",
     title: "往生堂第七十七代堂主",
+    cardTitle: "往生堂<br>第七十七代堂主",
     element: "火",
     region: "璃月",
     rarity: 5,
